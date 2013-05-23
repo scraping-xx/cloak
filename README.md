@@ -67,4 +67,5 @@ In this repository, 1 dyno is deployed at the app address so that the IP does no
 Cloak is written in Node JS and spawns a Child Process to interact with Heroku. Read more about these here: http://nodejs.org/api/child_process.html.
 
 ### LINKS
+https://github.com/icodeforlove/node-requester
 https://devcenter.heroku.com/articles/third-party-buildpacks
