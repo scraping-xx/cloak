@@ -14,7 +14,8 @@ Once installed you can make two basic API calls: `start` and `end`. Each are app
 
 * `http://your_host_address/start`: Node.JS spawns a child_process which executes the heroku command to scale up a new Dyno. The new DYNO runs a worker script which acts as a proxy to the newly created IP address. 
 
-For example, this script will use the newly created IP when accessing websites: 
+For example, this script will use the newly created IP to proxy outbound requests:
+
 		var getIP = require('request'); 
         function getIP('http://your_host_address/start', function(err, proxy) { 
         	try { 
