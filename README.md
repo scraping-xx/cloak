@@ -10,6 +10,9 @@ Heroku (www.heroku.com) is a platform that offers VM and hosting servies for app
 ## USE CASE
 For services where a "fresh" IP address is needed, Cloak allows you to access data anonymously from a new and anonymous IP without the need for proxy services or "spoofing". 
 
+# INSTALLATION
+
+
 ## BONUS
 In this repository, 1 dyno is deployed at the app address so that the IP does not break at a later date. I would suggest returning the IP address of the dyno in your own script which could then be built to allow requests from hundreds of dynos and therefore hundreds of addresses. 
 
