@@ -27,10 +27,8 @@ For services where a "fresh" IP address is needed, Cloak allows you to access da
 > node front-end.js // This should return "Bound: 3000" which is where the app is listening. 
 * Navigate to your hostaddress on port 3000. If this is on AWS make sure you have opened the security group on the port. 
 
-
-* ERRORS: Were you unabnle to authenticate? Follow these steps: https://devcenter.heroku.com/articles/keys
-* ERRORS: 
-
+* ERRORS
+Were you unabnle to authenticate? Follow these steps: https://devcenter.heroku.com/articles/keys
 
 ### BONUS
 In this repository, 1 dyno is deployed at the app address so that the IP does not break at a later date. I would suggest returning the IP address of the dyno in your own script which could then be built to allow requests from hundreds of dynos and therefore hundreds of addresses. 
