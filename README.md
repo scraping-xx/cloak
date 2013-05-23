@@ -16,12 +16,19 @@ For services where a "fresh" IP address is needed, Cloak allows you to access da
 * Download the repo and install the necessary packages.
 
 > git clone git://github.com/thnkr/cloak.git
+
 > cd cloak/app
+
 > git init
+
 > npm install
+
 > heroku create
+
 > git add . 
+
 > git commit -m "Some commit message." 
+
 > git push heroku master
 
 * Change directories into the "front-end" folder and open front-end.js. Edit the name returned by the "start" request. 
