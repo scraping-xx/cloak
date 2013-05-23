@@ -25,7 +25,8 @@ For services where a "fresh" IP address is needed, Cloak allows you to access da
 > node front-end.js // This should return "Bound: 3000" which is where the app is listening. 
 * Navigate to your hostaddress on port 3000. If this is on AWS make sure you have opened the security group on the port. 
 
-* ERRORS: https://devcenter.heroku.com/articles/keys
+* ERRORS: Were you unabnle to authenticate? Follow these steps: https://devcenter.heroku.com/articles/keys
+* ERRORS: 
 
 
 ### BONUS
