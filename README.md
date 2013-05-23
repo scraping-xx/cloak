@@ -16,20 +16,20 @@ Once installed you can make two basic API calls: `start` and `end`. Each are app
 
 For example, this script will use the newly created IP to proxy outbound requests with node-requester:
 
-		var Requester = require('requester'); 
-        function getIP('http://your_host_address/start', function(err, proxy) { 
-        	try {
-            return proxy; 
-        	} catch (err) { 
-            console.log('Unable to reach Cloak'); 
-            }
+	var Requester = require('requester'); 
+    function getIP('http://your_host_address/start', function(err, proxy) { 
+        try {
+        	return proxy; 
+        } catch (err) { 
+        	console.log('Unable to reach Cloak'); 
+        	}
         } 
-        var req = new Requester({
-            proxies: getIP().split(':');
-            });
-        req.get('someurl.com', function(data) { 
-        	console.log('Quietly found: ' + data); 
-            }); 
+    var req = new Requester({
+        proxies: getIP().split(':'); // This is unique to the conif of Requester.
+        });
+    req.get('someurl.com', function(data) { 
+        console.log('Quietly found: ' + data); 
+    }); 
 
 If your script breaks, or the IP is blocked/throttled just set up a callback to return the getIP function and reinitialize the package your are building on. 
 
