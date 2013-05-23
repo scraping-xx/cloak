@@ -11,6 +11,10 @@ Heroku (www.heroku.com) is a platform that offers VM and hosting servies for app
 For services where a "fresh" IP address is needed, Cloak allows you to access data anonymously from a new and anonymous IP without the need for proxy services or "spoofing". 
 
 ### INSTALLATION
+1. Create a free Heroku account at Heroku.com ()
+2. Install the Heroku Toolbelt ()
+3. item
+
 
 
 ### BONUS
