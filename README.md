@@ -27,7 +27,7 @@ For services where a "fresh" IP address is needed, Cloak allows you to access da
 * Change directories into the "front-end" folder and open front-end.js. Edit the name returned by the "start" request. 
 * Start the Node server.
 
-> node front-end.js // This should return "Bound: 3000" which is where the app is listening. 
+	node front-end.js // This should return "Bound: 3000" which is where the app is listening. 
 
 * Navigate to your hostaddress on port 3000. If this is on AWS make sure you have opened the security group on the port. 
 
