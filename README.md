@@ -14,15 +14,21 @@ Once installed you can make two basic API calls: `start` and `end`. Each are app
 
 1- `http://your_host_address/start`: Node.JS spawns a child_process which executes the heroku command to scale up a new Dyno. The new DYNO runs a worker script which acts as a proxy to the newly created IP address. 
 
-For example, this script will use the newly created IP to proxy outbound requests with Cheerio:
-		var getIP = require('request'); 
+For example, this script will use the newly created IP to proxy outbound requests with node-requester:
+		var Requester = require('requester'); 
         function getIP('http://your_host_address/start', function(err, proxy) { 
-        	try { 
-            ip.push(proxy)
+        	try {
+            return proxy; 
         	} catch (err) { 
             console.log('Unable to reach Cloak'); 
             }
         } 
+        var req = new Requester({
+            proxies: getIP().split(':');
+            });
+        req('someurl.com', function
+
+        
         
 2- `http://your_host_address/end`: Instructs Heroku to scale down the worker Dyno.  
 
