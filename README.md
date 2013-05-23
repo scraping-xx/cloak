@@ -12,8 +12,9 @@ For services where a "fresh" IP address is needed, Cloak allows you to access da
 
 ### INSTALLATION
 * Create a free Heroku account at www.Heroku.com.
-* Install the Heroku Toolbelt ()
-* item
+* Install the Heroku Toolbelt (https://toolbelt.heroku.com/)
+* Download the repo and install the necessary packages.
+
 * ERRORS: https://devcenter.heroku.com/articles/keys
 
 
