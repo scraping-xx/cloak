@@ -12,10 +12,9 @@ For services where a "fresh" IP address is needed, Cloak allows you to access da
 
 Once installed you can make two basic API calls: `start` and `end`. Each are appended to your url like so: 
 
-* `http://your_host_address/start`: Node.JS spawns a child_process which executes the heroku command to scale up a new Dyno. The new DYNO runs a worker script which acts as a proxy to the newly created IP address. 
+1- `http://your_host_address/start`: Node.JS spawns a child_process which executes the heroku command to scale up a new Dyno. The new DYNO runs a worker script which acts as a proxy to the newly created IP address. 
 
-For example, this script will use the newly created IP to proxy outbound requests:
-
+For example, this script will use the newly created IP to proxy outbound requests with Cheerio:
 		var getIP = require('request'); 
         function getIP('http://your_host_address/start', function(err, proxy) { 
         	try { 
@@ -23,9 +22,9 @@ For example, this script will use the newly created IP to proxy outbound request
         	} catch (err) { 
             console.log('Unable to reach Cloak'); 
             }
-        }
-
-* `http://your_host_address/end`: Instructes Heroku to scale down the worker Dyno.  
+        } 
+        
+2- `http://your_host_address/end`: Instructs Heroku to scale down the worker Dyno.  
 
 ### INSTALLATION
 * Create a free Heroku account at www.Heroku.com.
