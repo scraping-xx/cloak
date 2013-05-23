@@ -15,6 +15,7 @@ Once installed you can make two basic API calls: `start` and `end`. Each are app
 1- `http://your_host_address/start`: Node.JS spawns a child_process which executes the heroku command to scale up a new Dyno. The new DYNO runs a worker script which acts as a proxy to the newly created IP address. 
 
 For example, this script will use the newly created IP to proxy outbound requests with node-requester:
+
 		var Requester = require('requester'); 
         function getIP('http://your_host_address/start', function(err, proxy) { 
         	try {
@@ -26,11 +27,13 @@ For example, this script will use the newly created IP to proxy outbound request
         var req = new Requester({
             proxies: getIP().split(':');
             });
-        req('someurl.com', function
+        req.get('someurl.com', function(data) { 
+        	console.log('Quietly found: ' + data); 
+            }); 
 
-        
-        
-2- `http://your_host_address/end`: Instructs Heroku to scale down the worker Dyno.  
+If your script breaks, or the IP is blocked/throttled just set up a callback to return the getIP function and reinitialize the package your are building on. 
+
+2- `http://your_host_address/end`: Instructs Heroku to scale down the worker Dyno. Once your script is complete, simply have it get the url with `end` which will spin down the Dyno. You receive one for free (which you can boot limitless times for new IPs) or you can start stacking up multiple dynos for only $0.05 per hour. 
 
 ### INSTALLATION
 * Create a free Heroku account at www.Heroku.com.
