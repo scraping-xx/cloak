@@ -10,24 +10,40 @@ Heroku (www.heroku.com) is a platform that offers VM and hosting servies for app
 ### USE CASE
 For services where a "fresh" IP address is needed, Cloak allows you to access data anonymously from a new and anonymous IP without the need for proxy services or "spoofing". 
 
+Once installed you can make two basic API calls: `start` and `end`. Each are appended to your url like so: 
+
+* `http://your_host_address/start`: Node.JS spawns a child_process which executes the heroku command to scale up a new Dyno. The new DYNO runs a worker script which acts as a proxy to the newly created IP address. 
+
+For example, this script will use the newly created IP when accessing websites: 
+		var getIP = require('request'); 
+        function getIP('http://your_host_address/start', function(err, proxy) { 
+        	try { 
+            ip.push(proxy)
+        	} catch (err) { 
+            console.log('Unable to reach Cloak'); 
+            }
+        }
+
+* `http://your_host_address/end`: Instructes Heroku to scale down the worker Dyno.  
+
 ### INSTALLATION
 * Create a free Heroku account at www.Heroku.com.
 * Install the Heroku Toolbelt (https://toolbelt.heroku.com/)
 * Download the repo and install the necessary packages.
 
-	    `git clone git://github.com/thnkr/cloak.git`
-	    `cd cloak/app`
-	    `git init`
-	    `npm install`
- 	    `heroku create`
-	    `git add .`
-	    `git commit -m "Some commit message."` 
-	    `git push heroku master`
+	    git clone git://github.com/thnkr/cloak.git`
+	    cd cloak/app
+	    git init
+	    npm install
+ 	    heroku create
+	    git add .
+	    git commit -m "Some commit message."
+	    git push heroku master
 
 * Change directories into the "front-end" folder and open front-end.js. Edit the name returned by the "start" request. 
 * Start the Node server.
 
-	node front-end.js // This should return "Bound: 3000" which is where the app is listening. 
+		node front-end.js // This should return "Bound: 3000" which is where the app is listening. 
 
 * Navigate to your hostaddress on port 3000. If this is on AWS make sure you have opened the security group on the port. 
 
