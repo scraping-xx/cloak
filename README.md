@@ -14,6 +14,7 @@ For services where a "fresh" IP address is needed, Cloak allows you to access da
 * Create a free Heroku account at www.Heroku.com.
 * Install the Heroku Toolbelt (https://toolbelt.heroku.com/)
 * Download the repo and install the necessary packages.
+
 > git clone git://github.com/thnkr/cloak.git
  cd cloak/app
  git init
@@ -22,6 +23,7 @@ For services where a "fresh" IP address is needed, Cloak allows you to access da
  git add . 
  git commit -m "Some commit message." 
  git push heroku master
+
 * Change directories into the "front-end" folder and open front-end.js. Edit the name returned by the "start" request. 
 * Start the Node server.
 > node front-end.js // This should return "Bound: 3000" which is where the app is listening. 
