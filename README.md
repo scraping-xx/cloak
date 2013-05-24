@@ -59,10 +59,13 @@ If your script breaks, or the IP is blocked/throttled just set up a callback to 
 * ERRORS
 Were you unabnle to authenticate? Follow these steps: https://devcenter.heroku.com/articles/keys
 
+Make sure you change the Child_Process directory to match your Heroku app. This can be found in cloak/front-end/front-end.js.
+
 ### BONUS
 In this repository, 1 dyno is deployed at the app address so that the IP does not break at a later date. I would suggest returning the IP address of the dyno in your own script which could then be built to allow requests from hundreds of dynos and therefore hundreds of addresses. 
 
 Cloak is written in Node JS and spawns a Child Process to interact with Heroku. Read more about these here: http://nodejs.org/api/child_process.html.
 
 ### LINKS
-https://devcenter.heroku.com/articles/third-party-buildpacks
+* https://github.com/icodeforlove/node-requester
+* https://devcenter.heroku.com/articles/third-party-buildpacks
