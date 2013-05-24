@@ -16,7 +16,7 @@ app.get('/start', function(request, response) {
   		console.log('ERROR STARTING WORKER');
 	}
   });
-  	response.send('cloak.herokuapp.com:8888'); 
+  	response.send('cloak.herokuapp.com:8888'); // CHANGE THIS TO THE APP NAME GIVEN BY HEROKU.
 });
 app.get('/end', function(request, response) {
   var killWorker = exec('cd ~/cloak/app && heroku scale worker=0', function(error, stdout, stderr) {
@@ -29,5 +29,5 @@ app.get('/end', function(request, response) {
 });
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
-  console.log("Bound: " + port);
+  console.log("BOUND: " + port);
 });
