@@ -1,22 +1,32 @@
-var http = require('http');
-var sys  = require('sys');
-http.createServer(function(request, response) {
-  sys.log(request.connection.remoteAddress + ": " + request.method + " " + request.url);
-  var proxy = http.createClient(80, request.headers['host'])
-  var proxy_request = proxy.request(request.method, request.url, request.headers);
-  proxy_request.addListener('response', function (proxy_response) {
-    proxy_response.addListener('data', function(chunk) {
-      response.write(chunk, 'binary');
-    });
-    proxy_response.addListener('end', function() {
-      response.end();
-    });
-    response.writeHead(proxy_response.statusCode, proxy_response.headers);
-  });
-  request.addListener('data', function(chunk) {
-    proxy_request.write(chunk, 'binary');
-  });
-  request.addListener('end', function() {
-    proxy_request.end();
-  });
-}).listen(5000);
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 8080
+var events = require('events');
+var emitter = new events.EventEmitter;
+
+var request = require('request'); 
+var http = require('http'); 
+var Requester = require('requester'),
+    requester = new Requester({debug: 1});
+app.get('/', function(req, res) {
+	var bucket = [];
+	var targets = require('url').parse(req.url);
+	
+	emitter.getTarget = function(url) { 
+		var self = this;
+		console.log(url); 
+		var r = requester.get('http://' + url, function (body) {
+    		self.emit('heard', body);  
+		});
+	}
+	emitter.once('heard', function(body) { 
+		res.send(body); 
+	}); 
+	emitter.getTarget(targets.query);
+
+});
+ 
+app.listen(port);
+console.log('Listening on port 3001...idiot.');
+
+
