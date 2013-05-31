@@ -1,4 +1,4 @@
-CLOAK
+CLOAK v0.0.2
 =====
 Anonymous IP allocation through Heroku Worker Dynos.
 
