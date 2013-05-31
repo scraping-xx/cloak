@@ -1,0 +1,14 @@
+{
+  "name": "cloak",
+  "version": "0.0.2",
+  "dependencies": {
+    "express":"3.x.x",
+    "requester":"0.1.x"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  }
+}
+
+
