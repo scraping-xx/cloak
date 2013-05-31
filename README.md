@@ -3,37 +3,82 @@ CLOAK
 Anonymous IP allocation through Heroku Worker Dynos.
 
 ### BACKGROUND
-"Cloak" is a process for allocating IP addresses to services or outbound requests from a local machine or server. The scripts are included as a proof of concept around the app currently hosted at: http://cloak.herokuapp.com. Cloak is written in NodeJS 0.10.x.
+"Cloak" is call based API which means that it is controlled by requesting variations of a URL. It is broken into two running processes, a managing script on an AWS instance, and a series of pre-configured heroku Dynos which each have a built in scraping module. Each dyno requests a dynamic IP address and performs the data call for you. It supports http and https, Javascript, Jquery, AJAX and anything else with a GET request. If this is something you end up using I will add in the POST functionality for when you might need to login.  
 
-Heroku (www.heroku.com) is a platform that offers VM and hosting servies for applications. Often toughted as a weakness of Heroku, the platform rotates the IP address of each app deployment. On the other hand, the dynamic assignments are incredibly valuable if each dyno were to act as a proxy for requests from a local machine.
+The scripts are included as a proof of concept around the app currently hosted at: http://cloak.herokuapp.com. Cloak is written in Node 0.10.8 but all features are supported across all major languages (Sorry, lisp and fortran are off the table). 
+
+Heroku (www.heroku.com) is a platform that offers VM and hosting services for applications. Often touted as a weakness of Heroku, the platform rotates the IP address of each app deployment. On the other hand, the dynamic assignments are incredibly valuable if each dyno were to act as a proxy for requests from a local machine.
 
 ### USE CASE
 For services where a "fresh" IP address is needed, Cloak allows you to access data anonymously from a new and anonymous IP without the need for proxy services or "spoofing". 
 
-Once installed you can make two basic API calls: `start` and `end`. Each are appended to your url like so: 
+To use Cloak, you append every url call to the Cloak address. 
+1- ‘http://cloak.herokuapp.com/?http://www.whatismyip.com’ the response is then returned as a complete browser object. 
 
-1- `http://your_host_address/start`: Node.JS spawns a child_process which executes the heroku command to scale up a new Dyno. The new DYNO runs a worker script which acts as a proxy to the newly created IP address. 
+2- Cloak supports https secure connections automatically. Simply ensure the calls you want are the complete https url and Cloak will adapt. 
 
-For example, this script will use the newly created IP to proxy outbound requests with node-requester:
+Now your script has it’s own unique URL assigned to outgoing requests. 
 
-	var Requester = require('requester'); 
-    function getIP('http://your_host_address/start', function(err, proxy) { 
-        try {
-        	return proxy; 
-        } catch (err) { 
-        	console.log('Unable to reach Cloak'); 
-        	}
-        } 
-    var req = new Requester({
-        proxies: getIP().split(':'); // This is unique to the conif of Requester.
-        });
-    req.get('someurl.com', function(data) { 
-        console.log('Quietly found: ' + data); 
-    }); 
+What to do with throttling/blocked IPs/blacklisting? Simply include a latency timer and an if statement in your script. If the latency gets too long, load “http://cloak.herokuapp.com/refresh” and wait for 15 seconds for the dynos to boot down and reconnect with Heroku and Route Director. 
 
-If your script breaks, or the IP is blocked/throttled just set up a callback to return the getIP function and reinitialize the package your are building on. 
+And there is a secret function :)
 
-2- `http://your_host_address/end`: Instructs Heroku to scale down the worker Dyno. Once your script is complete, simply have it get the url with `end` which will spin down the Dyno. You receive one for free (which you can boot limitless times for new IPs) or you can start stacking up multiple dynos for only $0.05 per hour. 
+For large scale scrapes, pausing 15 seconds is both annoying and can start to add up. Especially as Google begins throttling at 250 requests. By calling, “http://cloak.herokuapp.com/cluster” you will tell the scalling manager to boot 100 worker threads each capapable of simaltaneously scrapping your requests. Each one works in a cascading error fashion so that as one IP gets blocked or throttled it kills the dyno and works with the next. ONLY use this were approved because it requires we pay Heroku for some of the processing time (using the blocking version of Cloak is free for us). 
+
+For example, this script (http://github.com/thnkr/cloak/examples/basic.py) demos controlling the cloak and scrapes whatismyip.com as an example so you can see the change.
+
+    import time
+    import codecs
+    import re
+    import urllib2
+    import pprint
+    from bs4 import BeautifulSoup, SoupStrainer
+    import string
+    import sys
+    freshIP = 'http://cloak.herokuapp.com/refresh'
+
+    target_url = 'http://www.whatismyip.com/'
+    header =  {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3','Accept-Encoding': 'none','Accept-Language':     'en-US,en;q=0.8','Connection': 'keep-alive'}
+    open_url = urllib2.Request(target_url, headers=header)
+    target_data = urllib2.urlopen(open_url)
+    soup = BeautifulSoup(target_data)
+    links = soup.findAll('div',{'id':'greenip'})[0].getText()
+    print ' ' 
+    print target_url
+    print 'Publicly...'
+    print links
+
+    target_url = 'http://cloak.herokuapp.com/?http://www.whatismyip.com/'
+    header =  {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3','Accept-Encoding': 'none','Accept-Language': 'en-US,en;q=0.8','Connection': 'keep-alive'}
+    open_url = urllib2.Request(target_url, headers=header)
+    target_data = urllib2.urlopen(open_url)
+    soup = BeautifulSoup(target_data)
+    links = soup.findAll('div',{'id':'greenip'})[0].getText()
+    print 'http://wwww.whatismyip.com/'
+    print 'In a cloak...'
+    print links
+    time.sleep(2) # "Paw"se for effect. 
+
+    print 'Now lets change cloaks...\nCALLED URL: cloak.herokuapp.com/refresh\nWAITING 15 Seconds'
+    open_url = urllib2.Request(freshIP, headers=header) # Note the freshIP variable. 
+    target_data = urllib2.urlopen(open_url)
+    soup = BeautifulSoup(target_data)
+    time.sleep(15)
+
+    print '\nUse New IP:'
+    target_url = 'http://cloak.herokuapp.com/?http://www.whatismyip.com/'
+    header =  {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Accept-Charset':   'ISO-8859-1,utf-8;q=0.7,*;q=0.3','Accept-Encoding': 'none','Accept-Language':'en-US,en;q=0.8','Connection': 'keep-alive'}
+    open_url = urllib2.Request(target_url, headers=header)
+    target_data = urllib2.urlopen(open_url)
+    soup = BeautifulSoup(target_data)
+    links = soup.findAll('div',{'id':'greenip'})[0].getText()
+    print 'http://wwww.whatismyip.com/'
+    print 'Our fresh IP:'
+    print links
+
+
+
+
 
 ### INSTALLATION
 * Create a free Heroku account at www.Heroku.com.
@@ -48,11 +93,6 @@ If your script breaks, or the IP is blocked/throttled just set up a callback to 
 	    git add .
 	    git commit -m "Some commit message."
 	    git push heroku master
-
-* Change directories into the "front-end" folder and open front-end.js. Edit the name returned by the "start" request. 
-* Start the Node server.
-
-		node front-end.js // This should return "Bound: 3000" which is where the app is listening. 
 
 * Navigate to your hostaddress on port 3000. If this is on AWS make sure you have opened the security group on the port. 
 
