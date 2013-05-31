@@ -76,7 +76,23 @@ For example, this script (http://github.com/thnkr/cloak/examples/basic.py) demos
     print 'Our fresh IP:'
     print links
 
+    The output of the example script looks like this:
+    http://www.whatismyip.com/
+    Publicly...
+    54.225.220.147
+    
+    http://wwww.whatismyip.com/
+    In a cloak...
+    184.72.209.15
+    
+    Now lets change cloaks...
+    CALLED URL: cloak.herokuapp.com/refresh
+    WAITING 15 Seconds
 
+    Our fresh IP:
+    http://wwww.whatismyip.com/
+    In a new cloak...
+    54.224.225.80
 
 
 
